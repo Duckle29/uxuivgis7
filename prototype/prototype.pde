@@ -5,7 +5,7 @@ int window_width = 600;
 int window_height = 400;
 
 //User Interface
-color button_color = color(255, 0, 0);
+color button_color = color(200, 0, 0);
 int button_diameter = 50;
 int button_pos[] = new int[2];
 int eta_pos[]  = new int[2];
@@ -122,7 +122,7 @@ void setup()
   d4_string_pos[0] = int(width * 0.6);
   d4_string_pos[1] = d2_string_pos[1] - 25;
   angle_scrollbar = new HScrollbar(0, int(height * 0.4), int(width * 0.25), 16, 16);
-  speed_scrollbar = new HScrollbar(0, int(height * 0.45), int(width * 0.25), 16, 16);
+  speed_scrollbar = new HScrollbar(0, int(height * 0.43), int(width * 0.25), 16, 16);
   boat_image = loadImage("boat.png");
   //boat = new Boat(new float[] {-100.0, 0}, QUARTER_PI, 0.5);
   imageMode(CENTER);
@@ -159,7 +159,6 @@ void draw() {
   color text_color = color(0);
 
   update(delta_time);
-  background(0);
 
   if (time_from_optimal < time_hysteresis && time_from_optimal > 0)
   {
@@ -171,14 +170,21 @@ void draw() {
   {
     text_color = color(255, 0, 0);
   }
-
+  background(text_color);
+  
+  rectMode(CENTER);
+  fill(0);
+  rect(d3_string_pos[0], d1_string_pos[1], 600, 70);
+  rect(d4_string_pos[0], d2_string_pos[1], 600, 70);
+  rectMode(CORNER);
+  rect(0,0, width * 0.25, height * 0.43);
 
   int[] string_alignment = {CENTER, CENTER};
   angle_scrollbar.update();
   angle_scrollbar.display();
   speed_scrollbar.update();
   speed_scrollbar.display();
-
+  
   draw_string("Distance to startline:", color(255, 0, 0), d3_string_pos, 16, string_alignment);
   draw_string("Expected distance at start:", color(255, 0, 0), d4_string_pos, 16, string_alignment);
   draw_string(String.valueOf(int(distance_to_start)) + " m", color(255, 0, 0), d1_string_pos, 64, string_alignment);
@@ -188,6 +194,8 @@ void draw() {
   //debug string
   draw_string(String.valueOf(int(countdown/1000)) + " s", color(140, 140,140), delta_time_pos, 32, string_alignment);
 
+  fill(0);
+  ellipse(button_pos[0], button_pos[1], button_diameter+2, button_diameter+2);
   fill(button_color);
   ellipse(button_pos[0], button_pos[1], button_diameter, button_diameter);
 
@@ -198,8 +206,9 @@ void draw() {
   if(countdown <= 0 || distance_to_start < 0.5)
   {
     is_sim_running = false;
-    reset = false;
+    //reset = false;
   }
+  print(String.valueOf(speed_scrollbar.getPos1()) + "\n");
 }
 
 void update(float delta_time)
@@ -227,7 +236,7 @@ void update(float delta_time)
   } else 
   {
     //stop a running simulation
-    button_color = color(255, 0, 0);
+    button_color = color(200, 0, 0);
     distance_to_start = 0.0f;
     distance_from_optimal = 0.0f;
     eta = 0.0f;
